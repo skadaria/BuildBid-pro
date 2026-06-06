@@ -1,0 +1,63 @@
+<svg width="600" height="250" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    /* Global line style for the campus scene */
+    .campus-line {
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      fill: none;
+    }
+    /* Text style, centered with geometric font */
+    .text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: bold;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  </style>
+
+  <!-- Campus building (left) -->
+  <rect x="50" y="80" width="100" height="120" class="campus-line" stroke="#1A237E" />
+  <rect x="75" y="160" width="50" height="40" class="campus-line" stroke="#1A237E" />
+  <rect x="160" y="100" width="50" height="100" class="campus-line" stroke="#1A237E" />
+  <path d="M 50 80 L 100 40 L 150 80" class="campus-line" stroke="#1A237E" />
+  <line x1="100" y1="40" x2="100" y2="80" class="campus-line" stroke="#1A237E" />
+  <!-- Windows -->
+  <rect x="60" y="95" width="20" height="20" class="campus-line" stroke="#1A237E" />
+  <rect x="90" y="95" width="20" height="20" class="campus-line" stroke="#1A237E" />
+  <rect x="120" y="95" width="20" height="20" class="campus-line" stroke="#1A237E" />
+  <rect x="170" y="110" width="30" height="30" class="campus-line" stroke="#1A237E" />
+
+  <!-- Tree -->
+  <line x1="250" y1="140" x2="250" y2="200" class="campus-line" stroke="#B71C1C" />
+  <circle cx="250" cy="120" r="30" class="campus-line" stroke="#B71C1C" />
+  <line x1="250" y1="120" x2="270" y2="100" class="campus-line" stroke="#B71C1C" />
+  <line x1="250" y1="120" x2="230" y2="100" class="campus-line" stroke="#B71C1C" />
+
+  <!-- Bench -->
+  <line x1="280" y1="190" x2="330" y2="190" class="campus-line" stroke="#000000" />
+  <line x1="280" y1="190" x2="280" y2="200" class="campus-line" stroke="#000000" />
+  <line x1="330" y1="190" x2="330" y2="200" class="campus-line" stroke="#000000" />
+  <line x1="285" y1="180" x2="335" y2="180" class="campus-line" stroke="#000000" />
+  
+  <!-- Campus building (right) -->
+  <rect x="450" y="100" width="100" height="100" class="campus-line" stroke="#1A237E" />
+  <line x1="450" y1="100" x2="500" y2="70" class="campus-line" stroke="#1A237E" />
+  <line x1="550" y1="100" x2="500" y2="70" class="campus-line" stroke="#1A237E" />
+  <!-- Windows -->
+  <rect x="460" y="115" width="25" height="25" class="campus-line" stroke="#1A237E" />
+  <rect x="515" y="115" width="25" height="25" class="campus-line" stroke="#1A237E" />
+  <line x1="500" y1="100" x2="500" y2="200" class="campus-line" stroke="#1A237E" />
+  <rect x="460" y="150" width="25" height="40" class="campus-line" stroke="#1A237E" />
+
+  <!-- Ground line -->
+  <line x1="0" y1="200" x2="600" y2="200" class="campus-line" stroke="#000000" />
+
+  <!-- Background box with rounded corners for the text -->
+  <rect x="90" y="215" width="420" height="40" rx="10" ry="10" fill="#F0FFF0" />
+  
+  <!-- The text "Web Applications Technologies" is centered -->
+  <text x="50%" y="235" class="text" fill="#1A237E">
+    Web Applications Technologies
+  </text>
+</svg>

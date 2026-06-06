@@ -1,0 +1,26 @@
+[
+  {
+    "model": "supply_chain.council",
+    "pk": 1,
+    "fields": {
+      "name": "Poppleton",
+      "contact": "Bob Builder",
+      "contact_email": "bob@poppleton.gov.uk",
+      "slug": "poppleton",
+      "created_at": "2025-09-15T09:09:13.495Z",
+      "updated_at": "2025-09-15T09:09:13.495Z"
+    }
+  },
+  {
+    "model": "supply_chain.council",
+    "pk": 2,
+    "fields": {
+      "name": "Huddersfield",
+      "contact": "Derek Digger",
+      "contact_email": "d.digger@huddersfield.gov.uk",
+      "slug": "huddersfield",
+      "created_at": "2025-09-15T09:33:05.600Z",
+      "updated_at": "2025-09-15T09:33:05.600Z"
+    }
+  }
+]

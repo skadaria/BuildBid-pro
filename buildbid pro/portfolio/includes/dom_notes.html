@@ -1,0 +1,85 @@
+	<section id="dom">
+		<h1 class="page-title">Document Object Model (DOM)</h1>
+		<p class="top_message">
+			<span class="answer_required">Please edit the HTML documents directly with your answers - making use of correct HTML markup</span>
+		</p>
+
+		<div class="card"">
+  		<div class="card-header">
+    		<h2>What is the DOM?</h2>
+  		</div>
+  		<div class="card-body">
+    		<p>
+				<span class="answer_required">It is a programming interface (API) for HTML and XML documents. It represents the structure of a webpage as a tree of objects, allowing programs primarily JavaScript to access and change the content, structure, and style of a document dynamically.</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="card"">
+  		<div class="card-header">
+    		<h2>How Does the DOM Work?</h2>
+  		</div>
+  		<div class="card-body">
+    		<p>
+				<span class="answer_required">The DOM works by representing an HTML document as a hierarchical tree of objects that programming languages, primarily JavaScript, can interact with to modify the webpage dynamically.</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="card"">
+  		<div class="card-header">
+    		<h2>DOM Tree Example</h2>
+  		</div>
+  		<div class="card-body">
+    		<p>
+				<span class="answer_required"><pre><code>
+Document
+├── DOCTYPE: html
+└── Element: html
+    ├── Element: head
+    │   └── Element: title
+    │       └── Text: "My Page"
+    └── Element: body
+        ├── Element: h1
+        │   └── Text: "Welcome"
+        └── Element: p
+            └── Text: "Hello world!"
+</code></pre></span>
+			</p>
+		</div>
+	</div>
+
+	<div class="card"">
+  		<div class="card-header">
+    		<h2>Why is the DOM important?</h2>
+  		</div>
+  		<div class="card-body">
+    		<p>
+				<span class="answer_required">The DOM is crucial because it acts as the bridge between a static web document (HTML) and dynamic programming languages (JavaScript), making modern, interactive websites possible.</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="card"">
+  		<div class="card-header">
+    		<h2>Common DOM Methods</h2>
+  		</div>
+  		<div class="card-body">
+    		<p>
+				<span class="answer_required"><ul>
+    <li><strong><code>&lt;document.getElementById()&gt;</code></strong>: Selects a single element based on its unique ID attribute.</li>
+    <li><strong><code>&lt;document.querySelector()&gt;</code></strong>: Selects the first element that matches a specified CSS selector (e.g., a class, ID, or element type).</li>
+    <li><strong><code>&lt;document.querySelectorAll()&gt;</code></strong>: Selects all elements that match a specified CSS selector, returning a list of nodes.</li>
+    <li><strong><code>&lt;element.addEventListener()&gt;</code></strong>: Attaches an event handler (like a 'click' or 'hover' function) to a specific element.</li>
+    <li><strong><code>&lt;element.appendChild()&gt;</code></strong>: Adds a new node (element) as the last child of a parent element.</li>
+    <li><strong><code>&lt;document.createElement()&gt;</code></strong>: Creates a new HTML element node that can then be added to the DOM.</li>
+    <li><strong><code>&lt;element.remove()&gt;</code></strong>: Removes the selected element from the DOM structure.</li>
+    <li><strong><code>&lt;element.textContent&gt;</code></strong>: Gets or sets the text content of an element and its descendants.</li>
+    <li><strong><code>&lt;element.innerHTML&gt;</code></strong>: Gets or sets the HTML markup contained within an element (use with caution due to security risks).</li>
+    <li><strong><code>&lt;element.setAttribute()&gt;</code></strong>: Sets the value of an attribute on the specified element (e.g., changing an image's `src`).</li>
+</ul>
+</span>
+			</p>
+		</div>
+	</div>
+</section>

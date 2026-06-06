@@ -1,0 +1,185 @@
+<!-- supply_chain/templates/supply_chain/view_package_bids.html -->
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}Bids for {{ work_package.title }} - BuildBid Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header Card -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm mb-4">
+            <a href="{% url 'dashboard' %}" class="text-slate-500 hover:text-blue-600 transition">Dashboard</a>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <a href="{% url 'project_detail' work_package.project.id %}" class="text-slate-500 hover:text-blue-600 transition">{{ work_package.project.title|truncatechars:20 }}</a>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-slate-800 font-medium">Review Bids</span>
+        </nav>
+
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">{{ work_package.title }}</h1>
+                    <div class="flex items-center gap-4 mt-1 text-sm text-slate-500">
+                        <span>Budget: <span class="font-medium text-slate-700">£{{ work_package.estimated_budget }}</span></span>
+                        <span>Deadline: <span class="font-medium text-slate-700">{{ work_package.deadline|date:"M d, Y" }}</span></span>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'project_detail' work_package.project.id %}" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Project
+            </a>
+        </div>
+    </div>
+
+    <!-- Bids List -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div class="px-5 py-3 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="font-semibold text-slate-800">Submitted Bids</h3>
+                <p class="text-xs text-slate-500">{{ bids.count }} proposal{{ bids.count|pluralize }} received</p>
+            </div>
+            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">Review Mode</span>
+        </div>
+
+        <div class="p-5">
+            {% if bids %}
+                <div class="space-y-4">
+                    {% for bid in bids %}
+                    <div class="border border-slate-200 rounded-lg p-5 hover:border-blue-300 transition">
+                        <div class="flex flex-col lg:flex-row justify-between gap-5">
+                            <!-- Contractor Info -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-medium uppercase">
+                                        {{ bid.contractor.username|slice:":2" }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">{{ bid.contractor.username }}</h4>
+                                        <p class="text-xs text-slate-500">
+                                            {{ bid.contractor.userprofile.company_name|default:"Independent Contractor" }}
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                    <div>
+                                        <p class="text-xs text-slate-500 mb-0.5">Bid Amount</p>
+                                        <p class="font-semibold text-slate-800">£{{ bid.amount }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-500 mb-0.5">Timeline</p>
+                                        <p class="font-medium text-slate-700">{{ bid.proposed_timeline }} days</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-500 mb-0.5">Submitted</p>
+                                        <p class="font-medium text-slate-700">{{ bid.submitted_at|date:"M d, Y" }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-500 mb-0.5">Status</p>
+                                        <span class="inline-block px-2 py-0.5 rounded text-xs font-medium
+                                            {% if bid.status == 'approved' %} bg-emerald-100 text-emerald-700
+                                            {% elif bid.status == 'rejected' %} bg-red-100 text-red-700
+                                            {% elif bid.status == 'submitted' %} bg-amber-100 text-amber-700
+                                            {% else %} bg-slate-100 text-slate-600 {% endif %}">
+                                            {{ bid.get_status_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-row lg:flex-col gap-2 justify-center lg:justify-start lg:min-w-[140px]">
+                                <button onclick="toggleDetails('{{ bid.id }}')" 
+                                        class="flex-1 lg:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    Details
+                                </button>
+                                
+                                {% if bid.status == 'submitted' %}
+                                <form method="POST" action="{% url 'update_bid_status' bid.id %}" class="flex-1 lg:flex-none">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="approved">
+                                    <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        Approve
+                                    </button>
+                                </form>
+                                <form method="POST" action="{% url 'update_bid_status' bid.id %}" class="flex-1 lg:flex-none">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="rejected">
+                                    <button type="submit" class="w-full py-2 border border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        Reject
+                                    </button>
+                                </form>
+                                {% elif bid.status == 'approved' %}
+                                <form method="POST" action="{% url 'update_bid_status' bid.id %}" class="flex-1 lg:flex-none">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="rejected">
+                                    <button type="submit" class="w-full py-2 border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-sm font-medium rounded-lg transition">
+                                        Revoke
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Expanded Bid Details -->
+                        <div id="details-{{ bid.id }}" class="hidden mt-5 pt-5 border-t border-slate-100">
+                            <h5 class="text-sm font-medium text-slate-700 mb-2">Experience Summary</h5>
+                            <div class="bg-slate-50 p-4 rounded-lg text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+                                {{ bid.experience_summary|default:"No experience summary provided." }}
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="text-sm text-slate-600">Certifications</span>
+                                    </div>
+                                    {% if bid.certifications %}
+                                        <a href="{{ bid.certifications.url }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition">Download</a>
+                                    {% else %}
+                                        <span class="text-xs text-slate-400">Not provided</span>
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                        <span class="text-sm text-slate-600">Insurance</span>
+                                    </div>
+                                    {% if bid.insurance_document %}
+                                        <a href="{{ bid.insurance_document.url }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition">Download</a>
+                                    {% else %}
+                                        <span class="text-xs text-slate-400">Not provided</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-10">
+                    <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    <p class="text-sm text-slate-500">No bids submitted yet</p>
+                    <p class="text-xs text-slate-400 mt-1">Check back later</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDetails(id) {
+        const details = document.getElementById('details-' + id);
+        details.classList.toggle('hidden');
+    }
+</script>
+{% endblock %}

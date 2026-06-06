@@ -1,0 +1,210 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}Create Project - BuildBid Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <nav class="flex items-center gap-2 text-sm text-slate-500 mb-2">
+                <a href="{% url 'dashboard' %}" class="hover:text-blue-600 transition">Dashboard</a>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <span class="text-slate-900 font-medium">New Project</span>
+            </nav>
+            <h1 class="text-2xl font-bold text-slate-900">Create New Project</h1>
+        </div>
+        <a href="{% url 'dashboard' %}" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Back
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Form -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </div>
+                    <h2 class="font-bold text-slate-900">Project Details</h2>
+                </div>
+
+                <div class="p-6">
+                    <form method="post" enctype="multipart/form-data" class="space-y-5">
+                        {% csrf_token %}
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Project Title *</label>
+                            <input type="text" name="title" required 
+                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                   placeholder="Enter project title">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Description *</label>
+                            <textarea name="description" rows="4" required 
+                                      class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-none"
+                                      placeholder="Describe the project scope, requirements, and objectives"></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Budget (£) *</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">£</span>
+                                    <input type="number" name="budget" step="0.01" min="0" required 
+                                           class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                           placeholder="0.00">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Location *</label>
+                                <input type="text" name="location" required 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                       placeholder="City, State">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+                            <select name="status" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                                <option value="draft">Draft - Save without publishing</option>
+                                <option value="published" selected>Published - Open for bidding</option>
+                                <option value="closed">Closed - Not accepting bids</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Start Date *</label>
+                                <input type="date" name="start_date" required 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                       value="{{ today|date:'Y-m-d' }}">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">End Date *</label>
+                                <input type="date" name="end_date" required 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                       value="{{ next_month|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Blueprint (Optional)</label>
+                            <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
+                                <input type="file" name="blueprint" class="hidden" id="blueprint-input">
+                                <label for="blueprint-input" class="cursor-pointer">
+                                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                    </div>
+                                    <p class="text-sm text-slate-600 font-medium">Click to upload blueprint</p>
+                                    <p class="text-xs text-slate-400 mt-1">PDF, JPG, PNG, DOC (Max 5MB)</p>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3 pt-4 border-t border-slate-100">
+                            <button type="submit" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg shadow-blue-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Create Project
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold transition">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Tips Card -->
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+                <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    Tips for Success
+                </h3>
+                <ul class="space-y-3 text-sm text-slate-600">
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 mt-0.5">✓</span>
+                        Write a clear, detailed description
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 mt-0.5">✓</span>
+                        Set realistic budget expectations
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 mt-0.5">✓</span>
+                        Include accurate timeline dates
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 mt-0.5">✓</span>
+                        Upload blueprints if available
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Status Info -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h3 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Status Guide
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <p><span class="font-semibold text-amber-700">Draft:</span> <span class="text-slate-600">Save without publishing</span></p>
+                    <p><span class="font-semibold text-emerald-700">Published:</span> <span class="text-slate-600">Open for contractor bids</span></p>
+                    <p><span class="font-semibold text-red-700">Closed:</span> <span class="text-slate-600">No longer accepting bids</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startDateInput = document.querySelector('input[name="start_date"]');
+    const endDateInput = document.querySelector('input[name="end_date"]');
+    
+    if (startDateInput && !startDateInput.value) {
+        const today = new Date().toISOString().split('T')[0];
+        startDateInput.value = today;
+    }
+    
+    if (endDateInput && !endDateInput.value) {
+        const today = new Date();
+        const nextMonth = new Date(today);
+        nextMonth.setDate(today.getDate() + 30);
+        endDateInput.value = nextMonth.toISOString().split('T')[0];
+    }
+    
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const title = document.querySelector('input[name="title"]').value.trim();
+            const description = document.querySelector('textarea[name="description"]').value.trim();
+            const budget = document.querySelector('input[name="budget"]').value;
+            const location = document.querySelector('input[name="location"]').value.trim();
+            
+            if (!title || !description || !budget || !location) {
+                e.preventDefault();
+                alert('Please fill in all required fields (Title, Description, Budget, Location).');
+                return false;
+            }
+            
+            if (parseFloat(budget) <= 0) {
+                e.preventDefault();
+                alert('Budget must be greater than 0.');
+                return false;
+            }
+            
+            return true;
+        });
+    }
+});
+</script>
+{% endblock %}

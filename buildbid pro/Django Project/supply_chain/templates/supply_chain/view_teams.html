@@ -1,0 +1,244 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}View Teams - BuildBid Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-highlight {
+        background-color: #bfdbfe;
+        padding: 1px 2px;
+        border-radius: 2px;
+    }
+    .row-highlight {
+        background-color: #eff6ff !important;
+    }
+    .teams-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+    .teams-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+    .teams-scroll::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+        border-radius: 3px;
+    }
+    .teams-scroll::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Project Teams</h1>
+                <p class="text-slate-500 text-sm mt-1">View contractors assigned to your projects</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Projects List -->
+    {% if projects_with_teams %}
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Projects with Teams</p>
+                        <p class="text-xl font-bold text-slate-800">{{ projects_with_teams|length }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Assignments</p>
+                        <p class="text-xl font-bold text-emerald-600">Active</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Status</p>
+                        <p class="text-xl font-bold text-slate-800">Managed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="flex items-center gap-3">
+            <div class="relative flex-1 max-w-sm">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="teamSearch" placeholder="Search project teams..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm">
+            </div>
+            <span id="searchResults" class="text-sm text-slate-500 hidden"></span>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <table class="w-full" id="teamsTable">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="text-left py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Project</th>
+                        <th class="text-left py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Location</th>
+                        <th class="text-left py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Budget</th>
+                        <th class="text-center py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="max-h-[340px] overflow-y-auto teams-scroll">
+            <table class="w-full">
+                <tbody class="divide-y divide-slate-100" id="teamsTableBody">
+                    {% for project_data in projects_with_teams %}
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                                    {{ project_data.project.title|slice:":2"|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">{{ project_data.project.title }}</p>
+                                    <p class="text-xs text-slate-500">{{ project_data.teams|length }} team{{ project_data.teams|length|pluralize }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 hidden md:table-cell">
+                            <span class="text-sm text-slate-600">{{ project_data.project.location }}</span>
+                        </td>
+                        <td class="py-4 px-6 hidden md:table-cell">
+                            <span class="text-sm font-medium text-slate-800">£{{ project_data.project.budget }}</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if project_data.project.status == 'published' %} bg-emerald-100 text-emerald-700
+                                {% elif project_data.project.status == 'completed' %} bg-blue-100 text-blue-700
+                                {% else %} bg-slate-100 text-slate-700 {% endif %}">
+                                {{ project_data.project.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6 text-right">
+                            <a href="{% url 'view_project_teams' project_data.project.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                View Teams
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-12 text-center">
+            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+            <h2 class="text-lg font-semibold text-slate-800 mb-2">No Teams Yet</h2>
+            <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">You don't have any accepted bids yet. Review pending bids to accept contractors for your projects.</p>
+            <a href="{% url 'pending_bids' %}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                Review Pending Bids
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('teamSearch');
+    const tableBody = document.getElementById('teamsTableBody');
+    const searchResults = document.getElementById('searchResults');
+    
+    if (!searchInput || !tableBody) return;
+    
+    const rows = tableBody.querySelectorAll('tr');
+    
+    // Store original content for each row
+    const originalContent = [];
+    rows.forEach(row => {
+        originalContent.push({
+            row: row,
+            html: row.innerHTML
+        });
+    });
+    
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    function highlightText(element, searchTerm) {
+        const text = element.textContent;
+        const regex = new RegExp('(' + escapeRegex(searchTerm) + ')', 'gi');
+        element.innerHTML = text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        let visibleCount = 0;
+        
+        // Restore original content first
+        originalContent.forEach(item => {
+            item.row.innerHTML = item.html;
+        });
+        
+        rows.forEach(row => {
+            const projectName = row.querySelector('td:first-child p.font-semibold');
+            const location = row.querySelector('td:nth-child(2) span');
+            
+            const nameText = projectName ? projectName.textContent.toLowerCase() : '';
+            const locationText = location ? location.textContent.toLowerCase() : '';
+            
+            const matches = nameText.includes(searchTerm) || locationText.includes(searchTerm);
+            
+            if (searchTerm === '' || matches) {
+                row.style.display = '';
+                row.classList.remove('row-highlight');
+                visibleCount++;
+                
+                if (searchTerm !== '' && matches) {
+                    row.classList.add('row-highlight');
+                    if (projectName && nameText.includes(searchTerm)) {
+                        highlightText(projectName, searchTerm);
+                    }
+                    if (location && locationText.includes(searchTerm)) {
+                        highlightText(location, searchTerm);
+                    }
+                }
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Update search results count
+        if (searchTerm !== '') {
+            searchResults.textContent = visibleCount + ' project' + (visibleCount !== 1 ? 's' : '') + ' found';
+            searchResults.classList.remove('hidden');
+        } else {
+            searchResults.classList.add('hidden');
+        }
+    });
+});
+</script>
+{% endblock %}
+

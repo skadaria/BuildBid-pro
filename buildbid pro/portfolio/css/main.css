@@ -1,0 +1,125 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Base styles */
+body {
+    font-family: "Jura", sans-serif;
+    width: 95vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #333;
+}
+.navbar li {
+    margin: 0;
+}
+.navbar-left {
+    display: flex;
+}
+.navbar-right,
+.navbar li.navbar-right {
+    margin-left: auto;
+    justify-self: flex-end;
+}
+.navbar a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 1em 2em;
+    transition: background 0.2s;
+}
+.navbar a:hover {
+    background: #555;
+}
+
+/* Container and footer */
+.container {
+    background: hsl(0, 9%, 98%);
+    min-height: 400px;
+    padding: 2em 2em;
+}
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background: #f1f1f1;
+    color: #333;
+    margin-top: 2em;
+}
+
+/* Utility classes */
+.answer_required {
+    font-family: "Montserrat", sans-serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 0.9em;
+    color: #555;
+}
+.top_message {
+    margin-bottom: 2em;
+}
+
+/* Shared card styles */
+.card {
+    border-radius: 4px;
+    border: 1px solid #dbdbdb;
+    color: #363636;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.card-header {
+    border-bottom: 1px solid #dbdbdb;
+    border-radius: 4px 4px 0 0;
+    font-weight: 700;
+    padding: 0.75em 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.card-body {
+    padding: 1em 1em;
+    color: #4a4a4a;
+}
+.page-title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    border-bottom: #222525 2px solid;
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: -0.3em;
+}
+
+/* Page-specific overrides */
+#html .card { background-color: #ebfffc; }
+#html .card-header { background-color: #00d1b2; color: #363636; }
+#html > h1 { /* page-title styles applied via class */ }
+
+#css .card { background-color: #ebf9ff; }
+#css .card-header { background-color: #66d1ff; color: #363636; }
+#css > h1 { /* page-title styles applied via class */ }
+
+#js .card { background-color: #fff5e6; }
+#js .card-header { background-color: #ffb366; color: #363636; }
+#js > h1 { /* page-title styles applied via class */ }
+
+#http .card { background-color: #fff0f6; }
+#http .card-header { background-color: #ff66a3; color: #363636; }
+#http > h1 { /* page-title styles applied via class */ }
+
+#dom .card { background-color: #efe3ed; }
+#dom .card-header { background-color: #cc6bd7; color: #363636; }
+#dom > h1 { /* page-title styles applied via class */ }
+
+#ai .card { background-color: #e7e5e4; }
+#ai .card-header { background-color: #57534d; color: #f1f5f9; font-size: 1rem; }
+#ai > h1 { /* page-title styles applied via class */ }
+

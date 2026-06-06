@@ -1,0 +1,145 @@
+<section id="ai">
+		<h1 class="page-title">Summary and Reflection on Artificial Intelligence (AI) Usage</h1>
+        <p class="top_message">
+				<span class="answer_required">Please edit the HTML documents directly with your answers - making use of correct HTML markup</span>
+		</p>
+
+        <p>
+            <span class="answer_required">Please provide a list of the AI prompts used to assist
+                in the creation of this portfolio, along with a brief reflection on how the AI response
+                helped (or not) your understanding. If you did not use AI, please state "No AI used".
+            </span>
+        </p>
+        <p>
+            <span class="answer_required">Please note that the list does not need to
+                include every minor prompt, but should cover the main prompts that 
+                significantly influenced and assisted you in your portfolio.
+            </span>
+        </p>
+
+        <p>
+            <span class="answer_required">Please create a new card for each prompt
+                used, detailing the prompt, a summary of the AI's response, and your 
+                reflection on its usefulness. Please also include the date when the prompt
+                was made.
+            </span>
+        </p>
+
+        <p>
+            <span class="answer_required">Please commit regularly to GIT - 
+                so that the date can be verified. While the exact date of the commit
+                may not match the date of the prompt, it should be close enough to
+                provide a reasonable estimate of when the prompt was made. 
+                </span>
+        </p>
+        <p>
+            <span class="answer_required">Completing this 
+                page at the end will not be acceptable.
+            </span>
+        </p>
+
+<!-- Card for Blank AI Prompt -->
+
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        Please write your prompt here
+                    </span>
+                </p>
+                <p>Date: ??-??-????</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    <span class="answer_required">Please write your answer here</span>
+                </p>
+            </div>
+        </div>
+
+<!-- Card for AI Prompt 1 -->
+
+        <div class="card">
+  		    <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        (PROVIDED EXAMPLE) Optimise the css file so that the styles cascasde properly
+                    </span>
+                </p>
+                <p>Date: 26-09-2025</p>
+  		    </div>
+            <div class="card-body">
+                <p>
+                    <span class="answer_required">The original style sheet didn't cascade the style optimally. Codepilot was used to make a suggestion and refactor the CSS. As an example:</span>
+                </p>
+                <pre>
+/* Original CSS */
+#html .card {
+  background-color:#ebfffc ;
+  border-radius: 4px;
+  border: 1px solid #dbdbdb;
+  color: #363636;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+/* Shared card styles */
+.card {
+    border-radius: 4px;
+    border: 1px solid #dbdbdb;
+    color: #363636;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+/* Refactored CSS suggested by AI */
+#html .card { background-color: #ebfffc; }
+                </pre>
+                <p>
+                    <span class="answer_required">The refactor also introduced "composes: page-title;" which is a conceptual way to show reuse.</span>
+                </p>
+                <pre>
+.page-title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    border-bottom: #222525 2px solid;
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: -0.3em;
+}
+
+#html > h1 { composes: page-title; }
+                </pre>            
+                </p>
+            </div>
+        </div>
+
+<!-- Card for AI Prompt 2 -->
+
+        <div class="card">
+  		    <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        (PROVIDED EXAMPLE) why does vscode say composes css(unknownProperties)
+                    </span>
+                </p>
+                <p>Date: 26-09-2025</p>
+  		    </div>
+            <div class="card-body">
+                <p>
+                    <span class="answer_required">AI includes compose in the css suggestion - on further examination, it appears that "composes" is not a standard CSS property, which is why VSCode flags it as unknown. AI suggested
+                    new CSS syntax and just add the class attribute to the HTML. The new css flags a warning as empty style rule is left. This
+                    is being kept should the need arise for future use.</span>
+                </p>
+                <pre>
+#html > h1 { /* page-title styles applied via class */ }
+
+&lt;section id="html"&gt;
+    &lt;h1 class="page-title"&gt;Hypertext Markup Language (HTML)&lt;/h1&gt;
+&lt;/section&gt;
+
+                </pre>
+            </div>
+        </div>
+
+
+</section>

@@ -1,0 +1,122 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}{{ project.title }} - Teams - BuildBid Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header Card -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm mb-4">
+            <a href="{% url 'dashboard' %}" class="text-slate-500 hover:text-blue-600 transition">Dashboard</a>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <a href="{% url 'view_teams' %}" class="text-slate-500 hover:text-blue-600 transition">Teams</a>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-slate-800 font-medium">{{ project.title|truncatechars:20 }}</span>
+        </nav>
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">{{ project.title }}</h1>
+                    <div class="flex flex-wrap items-center gap-4 mt-1 text-sm text-slate-500">
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            {{ project.location }}
+                        </span>
+                        <span class="font-medium text-slate-700">£{{ project.budget }}</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-medium
+                            {% if project.status == 'published' %} bg-emerald-100 text-emerald-700
+                            {% elif project.status == 'completed' %} bg-blue-100 text-blue-700
+                            {% else %} bg-slate-100 text-slate-600 {% endif %}">
+                            {{ project.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'view_teams' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Teams
+            </a>
+        </div>
+    </div>
+
+    <!-- Teams List -->
+    {% if teams %}
+        <div class="space-y-4">
+            {% for team_data in teams %}
+            <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+                <!-- Package Header -->
+                <div class="px-5 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800">{{ team_data.package.title }}</h3>
+                            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">
+                                    {{ team_data.package.get_category_display }}
+                                </span>
+                                <span>Budget: <span class="font-medium text-slate-700">£{{ team_data.package.estimated_budget }}</span></span>
+                                <span>Deadline: <span class="font-medium text-slate-700">{{ team_data.package.deadline|date:"M d, Y" }}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contractors List -->
+                <div class="p-5">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-3">Assigned Contractors</p>
+                    <div class="space-y-2">
+                        {% for contractor in team_data.contractors %}
+                        <div class="border border-slate-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-blue-300 transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
+                                    {{ contractor.user.first_name|slice:":1"|upper }}{{ contractor.user.last_name|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-medium text-slate-800">{{ contractor.user.first_name }} {{ contractor.user.last_name }}</p>
+                                    <p class="text-sm text-slate-500">{{ contractor.profile.company_name|default:"Independent Contractor" }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6 text-sm">
+                                <div class="text-right">
+                                    <p class="text-xs text-slate-500">Bid Amount</p>
+                                    <p class="font-semibold text-slate-800">£{{ contractor.bid.amount }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-slate-500">Timeline</p>
+                                    <p class="font-medium text-slate-700">{{ contractor.bid.proposed_timeline }} days</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-700">
+                                    Approved
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-12 text-center">
+            <div class="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <h2 class="text-lg font-bold text-slate-800 mb-1">No Teams Yet</h2>
+            <p class="text-sm text-slate-500 max-w-sm mx-auto">No accepted bids for this project. Review pending bids to build your team.</p>
+            <div class="mt-4">
+                <a href="{% url 'project_detail' project.id %}" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition">
+                    View Project Details →
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

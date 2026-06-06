@@ -1,0 +1,239 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}Project Report - {{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">{{ project.title }}</h1>
+                <p class="text-slate-500 text-sm mt-1">Project Analytics Report</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="{% url 'download_project_report_pdf' project.id %}" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Download PDF
+                </a>
+                <a href="{% url 'project_detail' project.id %}" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    View Details
+                </a>
+                <a href="{% url 'dashboard' %}" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Meta -->
+    <div class="text-sm text-slate-500 px-1">
+        Generated {{ report.generated_at|date:"M d, Y h:i A" }}{% if report.generated_by %} by {{ report.generated_by.username }}{% endif %}
+    </div>
+
+    <!-- Project Overview -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h2 class="font-semibold text-slate-800">Project Overview</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Status</p>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+                        {% if project.status == 'published' %} bg-emerald-50 text-emerald-700
+                        {% elif project.status == 'completed' %} bg-blue-50 text-blue-700
+                        {% elif project.status == 'closed' %} bg-amber-50 text-amber-700
+                        {% else %} bg-slate-50 text-slate-700 {% endif %}">
+                        {{ project.get_status_display }}
+                    </span>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Location</p>
+                    <p class="text-sm font-medium text-slate-800">{{ project.location }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Start Date</p>
+                    <p class="text-sm font-medium text-slate-800">{{ project.start_date|date:"M d, Y" }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">End Date</p>
+                    <p class="text-sm font-medium text-slate-800">{{ project.end_date|date:"M d, Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Summary -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h2 class="font-semibold text-slate-800">Financial Summary</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Budget</p>
+                    <p class="text-lg font-semibold text-slate-800">£{{ report.total_budget|floatformat:2 }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Actual Spending</p>
+                    <p class="text-lg font-semibold text-slate-800">£{{ report.actual_spending|floatformat:2 }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Budget Variance</p>
+                    <p class="text-lg font-semibold {% if report.budget_variance >= 0 %}text-emerald-600{% else %}text-red-600{% endif %}">
+                        £{{ report.budget_variance|floatformat:2 }}
+                    </p>
+                    <p class="text-xs {% if report.budget_variance >= 0 %}text-emerald-600{% else %}text-red-600{% endif %}">
+                        {% if report.budget_variance >= 0 %}Under budget{% else %}Over budget{% endif %}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Avg. Bid Amount</p>
+                    <p class="text-lg font-semibold text-slate-800">£{{ report.average_bid_amount|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bidding & Timeline -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Bidding Analytics -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <h2 class="font-semibold text-slate-800">Bidding Analytics</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                        <p class="text-2xl font-semibold text-slate-800">{{ report.total_bids_received }}</p>
+                        <p class="text-xs text-slate-500 mt-1">Received</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-semibold text-emerald-600">{{ report.total_bids_accepted }}</p>
+                        <p class="text-xs text-slate-500 mt-1">Accepted</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-semibold text-slate-800">{{ report.bid_acceptance_rate|floatformat:0 }}%</p>
+                        <p class="text-xs text-slate-500 mt-1">Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <h2 class="font-semibold text-slate-800">Timeline</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Days Until Deadline</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ report.days_until_deadline }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Schedule Status</p>
+                        {% if report.is_on_schedule %}
+                        <p class="text-sm font-medium text-emerald-600">On Schedule</p>
+                        {% else %}
+                        <p class="text-sm font-medium text-amber-600">Behind Schedule</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package Bids -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="font-semibold text-slate-800">Package Bids</h2>
+            <span class="text-sm text-slate-500">{{ package_bids|length }} packages</span>
+        </div>
+        <div class="p-6">
+        {% if package_bids %}
+            <div class="space-y-6">
+                {% for pkg in package_bids %}
+                <div class="border border-slate-200 rounded-lg overflow-hidden">
+                    <div class="bg-slate-50 px-4 py-3 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-medium text-slate-800">{{ pkg.package_title }}</h3>
+                            <p class="text-xs text-slate-500">Budget: £{{ pkg.estimated_budget|floatformat:2 }} · {{ pkg.total_bids }} bids</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-500">Recommended</p>
+                            <p class="text-sm font-semibold text-emerald-600">£{{ pkg.lowest_bid_amount|floatformat:2 }}</p>
+                        </div>
+                    </div>
+
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50 border-t border-slate-200">
+                                    <tr>
+                                        <th class="text-left text-xs font-medium text-slate-500 px-4 py-2">Contractor</th>
+                                        <th class="text-right text-xs font-medium text-slate-500 px-4 py-2">Amount</th>
+                                        <th class="text-right text-xs font-medium text-slate-500 px-4 py-2">Status</th>
+                                    </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for bid in pkg.all_bids %}
+                            <tr class="{% if bid.is_profitable %}bg-emerald-50/50{% endif %}">
+                                <td class="px-4 py-2.5 text-slate-700">{{ bid.contractor }}</td>
+                                <td class="px-4 py-2.5 text-right font-medium text-slate-800">£{{ bid.amount|floatformat:2 }}</td>
+                                <td class="px-4 py-2.5 text-right">
+                                    {% if bid.is_profitable %}
+                                    <span class="text-xs text-emerald-600 font-medium">Best Value</span>
+                                    {% else %}
+                                    <span class="text-xs text-slate-400">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="px-4 py-2 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
+                        Highest: £{{ pkg.highest_bid_amount|floatformat:2 }} · Average: £{{ pkg.average_bid_amount|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Total Summary -->
+            <div class="mt-6 flex justify-between items-center p-4 bg-slate-800 rounded-lg">
+                <div>
+                    <p class="text-xs text-slate-400">Total Recommended Cost</p>
+                    <p class="text-xl font-semibold text-white">£{{ total_recommended_cost|floatformat:2 }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400">Total Budget</p>
+                    <p class="text-lg font-medium text-white">£{{ report.total_budget|floatformat:2 }}</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-8 text-slate-500 text-sm">
+                No bids available for analysis
+            </div>
+        {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer Navigation -->
+    <div class="flex justify-between items-center text-sm py-2">
+        <div class="flex gap-4">
+            <a href="{% url 'project_list' %}" class="text-slate-600 hover:text-slate-900 transition">← All Projects</a>
+            <a href="{% url 'dashboard' %}" class="text-slate-600 hover:text-slate-900 transition">Dashboard</a>
+        </div>
+                <a href="{% url 'download_project_report_pdf' project.id %}" 
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Download PDF
+        </a>
+    </div>
+</div>
+{% endblock %}
